@@ -73,6 +73,33 @@ function eliminarPorId(items, id) {
   return true;
 }
 
+/**
+ * Muestra las estadisticas generales de las peliculas junto con 
+ * la duracion mas larga.
+ * @param {Array} lista - Lista de elementos a mostrar.
+ * @returns {void} No retorna nada.
+ */
+function estadisticas(lista) {
+  if (lista.length === 0) {
+    console.warn("No hay peliculas");
+    return;
+  }
+  let suma = 0;
+  let maximo = lista[0];
+  for (const film of lista) {
+    suma += film.duracion;
+    if (film.duracion > maximo.duracion) {
+      maximo = film;
+    }
+  }
+  const media = suma / lista.length;
+  console.log(`Peliculas: ${lista.length}`);
+  console.log(`Duracion total: ${suma} min`);
+  console.log(`Duracion medio: ${media.toFixed(1)} min`);
+  console.log(`La más larga: ${maximo.titulo} (${maximo.duracion} min)`);
+}
+
+
 const peliculas1 = [
   {
     id: 1,
@@ -244,20 +271,21 @@ const peliculas2 = [
 /* const filmsYear = filterByYear(peliculas1, 2000, 2010);
 showItems(filmsYear);
 
-filterByYear(peliculas1, 2010, 2015);
-CountByCategory(peliculas1, "Ciencia ficción"); */
+countByCategory(peliculas1, "Ciencia ficción"); */
 
 
-buscarPorTexto(peliculas1, "Avatar").forEach(v => console.log(v));
+/* buscarPorTexto(peliculas1, "Avatar").forEach(v => console.log(v));
 
 const item = {
   id: 11,
-    titulo: "Matrix",
-    director: "Lana y Lilly Wachowski",
-    anno: 1999,
-    genero: "Ciencia ficción",
-    duracion: 136
+  titulo: "Matrix",
+  director: "Lana y Lilly Wachowski",
+  anno: 1999,
+  genero: "Ciencia ficción",
+  duracion: 136
 };
 annadir(peliculas1, item);
 showItems(peliculas1);
-console.log(eliminarPorId(peliculas1, "5"));
+console.log(eliminarPorId(peliculas1, 11)); */
+
+estadisticas(peliculas1);
