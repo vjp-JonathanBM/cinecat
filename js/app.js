@@ -288,4 +288,7 @@ annadir(peliculas1, item);
 showItems(peliculas1);
 console.log(eliminarPorId(peliculas1, 11)); */
 
+console.table(peliculas1);
+console.table(peliculas2);
+
 estadisticas(peliculas1);
