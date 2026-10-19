@@ -1,37 +1,76 @@
-function showItems( lItems){
-    lItems.forEach(v => console.log(v));
+/**
+ * Muestra por consola cada elemento de la lista.
+ * @param {Array} items - Lista de elementos a mostrar.
+ * @returns {void} No devuelve nada.
+ */
+function showItems(items) {
+  items.forEach(v => console.log(v));
 }
 
-function filterByYear( items, annoAntes, annoDespues ) {
-    return items.filter(v => v.anno >= annoAntes && v.anno <= annoDespues);
-}
-function countByCategory( items, genre) {
-    let count = items.filter(v => v.genero === genre).length;
-    console.log(count, " peliculas encontradas del genero: ", genre);
-}
-
-function buscarPorTexto(lItems, text) {
-  let textMinus = text.toLowerCase();
-  return lItems.filter( v => v.titulo.toLowerCase() === textMinus);
+/**
+ * Filtra las películas cuyo año está dentro de un rango (ambos incluidos).
+ * @param {Array} items - Lista de películas.
+ * @param {number} desde - Año mínimo.
+ * @param {number} hasta - Año máximo.
+ * @returns {Array} Nuevo array con las películas dentro del rango.
+ */
+function filterByYear(items, desde, hasta) {
+  return items.filter(v => v.anno >= desde && v.anno <= hasta);
 }
 
-function annadir(lItems, item) {
-  let maxId = 1;
-  lItems.forEach(v => {
-    if(v.id >maxId) maxId=v.id;
+/**
+ * Cuenta cuántas películas hay de un género y lo muestra por consola.
+ * @param {Array} items - Lista de películas.
+ * @param {string} genre - Género a contar (debe coincidir exactamente).
+ * @returns {void} No devuelve nada, solo imprime el resultado.
+ */
+function countByCategory(items, genre) {
+  const count = items.filter(v => v.genero === genre).length;
+  console.log(count, "peliculas encontradas del genero:", genre);
+}
+
+/**
+ * Busca películas cuyo título contenga el texto indicado,
+ * sin distinguir mayúsculas de minúsculas.
+ * @param {Array} items - Lista de películas.
+ * @param {string} text - Texto a buscar dentro del título.
+ * @returns {Array} Nuevo array con las películas encontradas.
+ */
+function buscarPorTexto(items, text) {
+  const textMinus = text.toLowerCase();
+  return items.filter(v => v.titulo.toLowerCase().includes(textMinus));
+}
+
+/**
+ * Añade una película a la lista asignándole un id nuevo
+ * (el mayor id existente + 1). No modifica el objeto original,
+ * guarda una copia con el id asignado.
+ * @param {Array} items - Lista de películas donde se añade.
+ * @param {Object} item - Película a añadir (sin id).
+ * @returns {number} El id asignado a la nueva película.
+ */
+function annadir(items, item) {
+  let maxId = 0;
+  items.forEach(v => {
+    if (v.id > maxId) maxId = v.id;
   });
-  item.id = maxId;
-  lItems.push(item);
-  return maxId;
+
+  const nuevoId = maxId + 1;
+  items.push({ ...item, id: nuevoId });
+  return nuevoId;
 }
 
-function eliminarPorId(lItems, id) {
-  let index = lItems.findIndex(v => v.id == id);
-  if( index != -1) {
-    lItems.splice(index, 1);
-    return true;
-  }
-  return false;
+/**
+ * Elimina de la lista la película con el id indicado.
+ * @param {Array} items - Lista de películas.
+ * @param {number} id - Id de la película a eliminar.
+ * @returns {boolean} true si se eliminó, false si no existe ese id.
+ */
+function eliminarPorId(items, id) {
+  const index = items.findIndex(v => v.id === id);
+  if (index === -1) return false;
+  items.splice(index, 1);
+  return true;
 }
 
 const peliculas1 = [
@@ -202,8 +241,8 @@ const peliculas2 = [
 //showItems(peliculas1);
 //showItems(peliculas2);
 
-/* filmsYear = filterByYear(peliculas1, 2000, 2010);
-console.log(filmsYear.forEach(v => console.log(v)));
+/* const filmsYear = filterByYear(peliculas1, 2000, 2010);
+showItems(filmsYear);
 
 filterByYear(peliculas1, 2010, 2015);
 CountByCategory(peliculas1, "Ciencia ficción"); */
@@ -211,7 +250,7 @@ CountByCategory(peliculas1, "Ciencia ficción"); */
 
 buscarPorTexto(peliculas1, "Avatar").forEach(v => console.log(v));
 
-item = {
+const item = {
   id: 11,
     titulo: "Matrix",
     director: "Lana y Lilly Wachowski",
