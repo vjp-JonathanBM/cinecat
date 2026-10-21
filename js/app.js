@@ -99,6 +99,14 @@ function estadisticas(lista) {
   console.log(`La más larga: ${maximo.titulo} (${maximo.duracion} min)`);
 }
 
+function pintar (list) {
+  const article = document.querySelector("#listado");
+  article.replaceChildren(...list);
+}
+
+function crearTarjeta() {
+  
+}
 
 const peliculas1 = [
   {
@@ -265,8 +273,8 @@ const peliculas2 = [
   }
 ];
 
-//showItems(peliculas1);
-//showItems(peliculas2);
+showItems(peliculas1);
+showItems(peliculas2);
 
 /* const filmsYear = filterByYear(peliculas1, 2000, 2010);
 showItems(filmsYear);
@@ -292,3 +300,4 @@ console.table(peliculas1);
 console.table(peliculas2);
 
 estadisticas(peliculas1);
+
