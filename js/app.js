@@ -104,8 +104,60 @@ function pintar (list) {
   article.replaceChildren(...list);
 }
 
-function crearTarjeta() {
+function crearTarjeta(elemento) {
+  const tarjeta = document.createElement("article");
+  tarjeta.classList.add("tarjeta");
+
+  const titulo = document.createElement("h3");
+  titulo.textContent = elemento.tilulo;
+
+  const parrafo = document.createElement("p");
   
+  parrafo.textContent =
+      "Id: " + elemento.id +
+      "Genero: " + elemento.genero +
+      "Año: " + elemento.anno +
+      "Duracion: " + elemento.duracion +
+      "Director: " + elemento.director;
+
+  tarjeta.appendChild(titulo);
+  tarjeta.appendChild(parrafo);
+
+  return tarjeta;
+}
+
+function ordenar (lista, criterio) {
+  let listaAux = [...lista];
+  switch (criterio){
+    case "id":
+      listaAux.sort((a, b) => a.id - b.id);
+      break;
+    case "titulo":
+      listaAux.sort((a,b) => a.titulo.localCompare(b.tilulo));
+      break;
+    case "director":
+      listaAux.sort((a,b) => a.director.localCompare(b.director));
+      break;
+    case "anno":
+      listaAux.sort((a, b) => a.anno - b.anno);
+      break;
+    case "genero":
+      listaAux.sort((a,b) => a.genero.localCompare(b.genero));
+      break;
+    case "duracion":
+      listaAux.sort((a, b) => a.duracion - b.duracion);
+      break;
+    default:
+      console.error("Criterio incorrecto.");
+      break;
+    }
+  return listaAux;
+}
+
+function actualizar (){
+  let listaAux = buscarPorTexto(peliculas1, this.textoBuscado);
+  listaAux = ordenar(listaAux, this.criterio)
+  pintar(listaAux);
 }
 
 const peliculas1 = [
@@ -272,9 +324,12 @@ const peliculas2 = [
     duracion: 143
   }
 ];
+//TODO: Tengo que hacer los eventos de la sesion 11 B3
+let textoBuscado = "";
+let criterio ="ninguno";
 
-showItems(peliculas1);
-showItems(peliculas2);
+/* showItems(peliculas1);
+showItems(peliculas2); */
 
 /* const filmsYear = filterByYear(peliculas1, 2000, 2010);
 showItems(filmsYear);
@@ -296,8 +351,6 @@ annadir(peliculas1, item);
 showItems(peliculas1);
 console.log(eliminarPorId(peliculas1, 11)); */
 
-console.table(peliculas1);
-console.table(peliculas2);
-
-estadisticas(peliculas1);
+//estadisticas(peliculas1);
+crearTarjeta();
 
