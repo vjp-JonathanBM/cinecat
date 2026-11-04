@@ -81,44 +81,106 @@ function eliminarPorId(items, id) {
  */
 function estadisticas(lista) {
   if (lista.length === 0) {
-    console.warn("No hay peliculas");
-    return;
+    return null;
   }
+
   let suma = 0;
   let maximo = lista[0];
+
   for (const film of lista) {
     suma += film.duracion;
+
     if (film.duracion > maximo.duracion) {
       maximo = film;
     }
   }
+
   const media = suma / lista.length;
-  console.log(`Peliculas: ${lista.length}`);
-  console.log(`Duracion total: ${suma} min`);
-  console.log(`Duracion medio: ${media.toFixed(1)} min`);
-  console.log(`La más larga: ${maximo.titulo} (${maximo.duracion} min)`);
+
+  return {
+    total: lista.length,
+    duracionTotal: suma,
+    media: media.toFixed(1),
+    maximo: `${maximo.titulo} (${maximo.duracion} min)`
+  };
 }
 
-function pintar (list) {
-  const article = document.querySelector("#listado");
-  article.replaceChildren(...list);
+function pintarEstadisticas(lista) {
+  const resultado = estadisticas(lista);
+  const elemento = document.querySelector("#estadisticas");
+
+  if (resultado === null) {
+    elemento.textContent = "No hay películas para mostrar.";
+    return;
+  }
+
+  elemento.textContent = `Películas: ${resultado.total} | Duración total: ${resultado.duracionTotal} min | Duración media: ${resultado.media} min | La más larga: ${resultado.maximo}`;
 }
+
+function pintar(list) {
+  const article = document.querySelector("#listado");
+  article.replaceChildren();
+  for (const film of list) {
+    article.append(crearTarjeta(film));
+  }
+}
+
+
+function obtenerClaseGenero(genero) {
+    switch (genero.toLowerCase()) {
+        case "acción":
+            return "tarjeta-accion";
+
+        case "comedia":
+            return "tarjeta-comedia";
+
+        case "terror":
+            return "tarjeta-terror";
+
+        case "romance":
+            return "tarjeta-romance";
+
+        case "drama":
+            return "tarjeta-drama";
+
+        case "ciencia ficción":
+            return "tarjeta-ciencia-ficcion";
+
+        case "animación":
+            return "tarjeta-animacion";
+        
+        case "deportes":
+            return "tarjeta-deportes";
+        
+        case "crimen":
+            return "tarjeta-crimen";
+
+        case "aventura":
+            return "tarjeta-aventura";
+            
+        default:
+            return "";
+    }
+}
+
 
 function crearTarjeta(elemento) {
   const tarjeta = document.createElement("article");
   tarjeta.classList.add("tarjeta");
 
+  tarjeta.classList.add(obtenerClaseGenero(elemento.genero));
+
   const titulo = document.createElement("h3");
-  titulo.textContent = elemento.tilulo;
+  titulo.textContent = elemento.titulo;
 
   const parrafo = document.createElement("p");
-  
+
   parrafo.textContent =
-      "Id: " + elemento.id +
-      "Genero: " + elemento.genero +
-      "Año: " + elemento.anno +
-      "Duracion: " + elemento.duracion +
-      "Director: " + elemento.director;
+    "Id: " + elemento.id +
+    "Genero: " + elemento.genero +
+    "Año: " + elemento.anno +
+    "Duracion: " + elemento.duracion +
+    "Director: " + elemento.director;
 
   tarjeta.appendChild(titulo);
   tarjeta.appendChild(parrafo);
@@ -126,23 +188,23 @@ function crearTarjeta(elemento) {
   return tarjeta;
 }
 
-function ordenar (lista, criterio) {
+function ordenar(lista, criterio) {
   let listaAux = [...lista];
-  switch (criterio){
+  switch (criterio) {
     case "id":
       listaAux.sort((a, b) => a.id - b.id);
       break;
     case "titulo":
-      listaAux.sort((a,b) => a.titulo.localCompare(b.tilulo));
+      listaAux.sort((a, b) => a.titulo.localCompare(b.tilulo));
       break;
     case "director":
-      listaAux.sort((a,b) => a.director.localCompare(b.director));
+      listaAux.sort((a, b) => a.director.localCompare(b.director));
       break;
     case "anno":
       listaAux.sort((a, b) => a.anno - b.anno);
       break;
     case "genero":
-      listaAux.sort((a,b) => a.genero.localCompare(b.genero));
+      listaAux.sort((a, b) => a.genero.localCompare(b.genero));
       break;
     case "duracion":
       listaAux.sort((a, b) => a.duracion - b.duracion);
@@ -150,16 +212,17 @@ function ordenar (lista, criterio) {
     default:
       console.error("Criterio incorrecto.");
       break;
-    }
+  }
   return listaAux;
 }
 
-function actualizar (){
+function actualizar() {
   let listaAux = buscarPorTexto(peliculas1, this.textoBuscado);
   listaAux = ordenar(listaAux, this.criterio)
   pintar(listaAux);
 }
 
+// Añadir atributo estreno con tipo fecha dd-mm-aaaa o algun formato similar, mirar en las diapositivas
 const peliculas1 = [
   {
     id: 1,
@@ -326,7 +389,7 @@ const peliculas2 = [
 ];
 //TODO: Tengo que hacer los eventos de la sesion 11 B3
 let textoBuscado = "";
-let criterio ="ninguno";
+let criterio = "ninguno";
 
 /* showItems(peliculas1);
 showItems(peliculas2); */
@@ -352,5 +415,34 @@ showItems(peliculas1);
 console.log(eliminarPorId(peliculas1, 11)); */
 
 //estadisticas(peliculas1);
-crearTarjeta();
 
+pintar(peliculas1);
+//04-11-2026
+
+function guardarCookie(nombre, valor, dias) {
+  const segundos = dias * 24 * 60 * 60;
+  const texto = encodeURIComponent(valor); 
+  document.cookie = `${nombre}=${texto}; max-age=${segundos}; path=/`;
+} 
+function leerCookie(nombre) { 
+  const partes = document.cookie.split("; ");
+  for (const parte of partes) { const [clave, valor] = parte.split("=");
+    if (clave === nombre) { 
+      return decodeURIComponent(valor);
+    } 
+  } 
+  return null;
+}
+
+function elegirOrden (nuevo) { 
+  criterio = nuevo; 
+  guardarCookie("orden", criterio, 30); 
+  actualizar(); 
+  document.querySelector("#ordenNombre") 
+    .addEventListener("click", () => elegirOrden("nombre"));
+    document.querySelector("#ordenTiempo") 
+      .addEventListener("click", () => elegirOrden("tiempo"));
+}
+
+/* criterio = leerCookie("orden") ?? "ninguno"; 
+actualizar(); */
