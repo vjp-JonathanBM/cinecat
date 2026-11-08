@@ -208,6 +208,17 @@ function actualizar() {
   const encontradas = buscarPorTexto(peliculas, textoBuscado);
   const ordenadas = ordenar(encontradas, criterio);
   pintar(ordenadas);
+  pintarResumen(ordenadas);
+}
+
+function pintarResumen(peliculasFiltradas) {
+  const resumenP = document.querySelector(".resumen");
+
+  if(peliculasFiltradas.length > 0) {
+    resumenP.textContent = "Mostrando "+peliculasFiltradas.length + " de "+peliculas.length;
+  }else{
+    resumenP.textContent = "No hay peliculas que contengan << " + textoBuscado + ">>.";
+  }
 }
 
 const peliculas1 = [
@@ -402,6 +413,7 @@ const peliculas = [...peliculas1, ...peliculas2];
 
 let textoBuscado = "";
 let criterio = "ninguno";
+let resumen = "Mostrando";
 
 pintar(peliculas);
 
