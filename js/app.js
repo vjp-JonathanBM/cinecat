@@ -178,6 +178,7 @@ function crearTarjeta(elemento) {
   parrafo.textContent =
     "Id: " + elemento.id +
     "Genero: " + elemento.genero +
+    "Estreno: " + elemento.estreno +
     "Año: " + elemento.anno +
     "Duracion: " + elemento.duracion +
     "Director: " + elemento.director;
@@ -189,46 +190,33 @@ function crearTarjeta(elemento) {
 }
 
 function ordenar(lista, criterio) {
-  let listaAux = [...lista];
-  switch (criterio) {
-    case "id":
-      listaAux.sort((a, b) => a.id - b.id);
-      break;
-    case "titulo":
-      listaAux.sort((a, b) => a.titulo.localCompare(b.tilulo));
-      break;
-    case "director":
-      listaAux.sort((a, b) => a.director.localCompare(b.director));
-      break;
-    case "anno":
-      listaAux.sort((a, b) => a.anno - b.anno);
-      break;
-    case "genero":
-      listaAux.sort((a, b) => a.genero.localCompare(b.genero));
-      break;
-    case "duracion":
-      listaAux.sort((a, b) => a.duracion - b.duracion);
-      break;
-    default:
-      console.error("Criterio incorrecto.");
-      break;
+  const copia = [...lista];
+  if (criterio === "titulo") {
+    copia.sort((a, b) =>
+      a.titulo.localeCompare(b.titulo));
+  } else if (criterio === "duracion") {
+    copia.sort((a, b) => a.duracion - b.duracion);
   }
-  return listaAux;
+   else if (criterio === "estreno") {
+    copia.sort((a, b) => a.estreno - b.estreno);
+  }
+  return copia;
 }
+
 
 function actualizar() {
-  let listaAux = buscarPorTexto(peliculas1, this.textoBuscado);
-  listaAux = ordenar(listaAux, this.criterio)
-  pintar(listaAux);
+  const encontradas = buscarPorTexto(peliculas, textoBuscado);
+  const ordenadas = ordenar(encontradas, criterio);
+  pintar(ordenadas);
 }
 
-// Añadir atributo estreno con tipo fecha dd-mm-aaaa o algun formato similar, mirar en las diapositivas
 const peliculas1 = [
   {
     id: 1,
     titulo: "Titanic",
     director: "James Cameron",
     anno: 1997,
+    estreno: "19-12-1997",
     genero: "Romance",
     duracion: 195
   },
@@ -237,6 +225,7 @@ const peliculas1 = [
     titulo: "Avatar",
     director: "James Cameron",
     anno: 2009,
+    estreno: "18-12-2009",
     genero: "Ciencia ficción",
     duracion: 162
   },
@@ -245,6 +234,7 @@ const peliculas1 = [
     titulo: "Origen",
     director: "Christopher Nolan",
     anno: 2010,
+    estreno: "16-07-2010",
     genero: "Ciencia ficción",
     duracion: 148
   },
@@ -253,6 +243,7 @@ const peliculas1 = [
     titulo: "Gladiator",
     director: "Ridley Scott",
     anno: 2000,
+    estreno: "05-05-2000",
     genero: "Acción",
     duracion: 155
   },
@@ -261,6 +252,7 @@ const peliculas1 = [
     titulo: "El padrino",
     director: "Francis Ford Coppola",
     anno: 1972,
+    estreno: "24-03-1972",
     genero: "Drama",
     duracion: 175
   },
@@ -269,6 +261,7 @@ const peliculas1 = [
     titulo: "Interstellar",
     director: "Christopher Nolan",
     anno: 2014,
+    estreno: "07-11-2014",
     genero: "Ciencia ficción",
     duracion: 169
   },
@@ -277,6 +270,7 @@ const peliculas1 = [
     titulo: "Joker",
     director: "Todd Phillips",
     anno: 2019,
+    estreno: "04-10-2019",
     genero: "Drama",
     duracion: 122
   },
@@ -285,6 +279,7 @@ const peliculas1 = [
     titulo: "Toy Story",
     director: "John Lasseter",
     anno: 1995,
+    estreno: "22-11-1995",
     genero: "Animación",
     duracion: 81
   },
@@ -293,6 +288,7 @@ const peliculas1 = [
     titulo: "Tiburón",
     director: "Steven Spielberg",
     anno: 1975,
+    estreno: "20-06-1975",
     genero: "Terror",
     duracion: 124
   },
@@ -301,16 +297,20 @@ const peliculas1 = [
     titulo: "Rocky",
     director: "John G. Avildsen",
     anno: 1976,
+    estreno: "03-12-1976",
     genero: "Deportes",
     duracion: 119
   }
 ];
+
+
 const peliculas2 = [
   {
     id: 11,
     titulo: "Matrix",
     director: "Lana y Lilly Wachowski",
     anno: 1999,
+    estreno: "31-03-1999",
     genero: "Ciencia ficción",
     duracion: 136
   },
@@ -319,6 +319,7 @@ const peliculas2 = [
     titulo: "Forrest Gump",
     director: "Robert Zemeckis",
     anno: 1994,
+    estreno: "06-07-1994",
     genero: "Drama",
     duracion: 142
   },
@@ -327,6 +328,7 @@ const peliculas2 = [
     titulo: "Pulp Fiction",
     director: "Quentin Tarantino",
     anno: 1994,
+    estreno: "14-10-1994",
     genero: "Crimen",
     duracion: 154
   },
@@ -335,6 +337,7 @@ const peliculas2 = [
     titulo: "Los Vengadores",
     director: "Joss Whedon",
     anno: 2012,
+    estreno: "04-05-2012",
     genero: "Acción",
     duracion: 143
   },
@@ -343,6 +346,7 @@ const peliculas2 = [
     titulo: "Coco",
     director: "Lee Unkrich",
     anno: 2017,
+    estreno: "22-11-2017",
     genero: "Animación",
     duracion: 105
   },
@@ -351,6 +355,7 @@ const peliculas2 = [
     titulo: "Jurassic Park",
     director: "Steven Spielberg",
     anno: 1993,
+    estreno: "11-06-1993",
     genero: "Aventura",
     duracion: 127
   },
@@ -359,6 +364,7 @@ const peliculas2 = [
     titulo: "Star Wars",
     director: "George Lucas",
     anno: 1977,
+    estreno: "25-05-1977",
     genero: "Ciencia ficción",
     duracion: 121
   },
@@ -367,6 +373,7 @@ const peliculas2 = [
     titulo: "El rey león",
     director: "Roger Allers",
     anno: 1994,
+    estreno: "24-06-1994",
     genero: "Animación",
     duracion: 88
   },
@@ -375,6 +382,7 @@ const peliculas2 = [
     titulo: "Regreso al futuro",
     director: "Robert Zemeckis",
     anno: 1985,
+    estreno: "03-07-1985",
     genero: "Aventura",
     duracion: 116
   },
@@ -383,40 +391,25 @@ const peliculas2 = [
     titulo: "Piratas del Caribe",
     director: "Gore Verbinski",
     anno: 2003,
+    estreno: "09-07-2003",
     genero: "Aventura",
     duracion: 143
   }
 ];
-//TODO: Tengo que hacer los eventos de la sesion 11 B3
+
+
+const peliculas = [...peliculas1, ...peliculas2];
+
 let textoBuscado = "";
 let criterio = "ninguno";
 
-/* showItems(peliculas1);
-showItems(peliculas2); */
+pintar(peliculas);
 
-/* const filmsYear = filterByYear(peliculas1, 2000, 2010);
-showItems(filmsYear);
+buscador.addEventListener("input", () => {
+  textoBuscado = buscador.value;
+  actualizar();
+});
 
-countByCategory(peliculas1, "Ciencia ficción"); */
-
-
-/* buscarPorTexto(peliculas1, "Avatar").forEach(v => console.log(v));
-
-const item = {
-  id: 11,
-  titulo: "Matrix",
-  director: "Lana y Lilly Wachowski",
-  anno: 1999,
-  genero: "Ciencia ficción",
-  duracion: 136
-};
-annadir(peliculas1, item);
-showItems(peliculas1);
-console.log(eliminarPorId(peliculas1, 11)); */
-
-//estadisticas(peliculas1);
-
-pintar(peliculas1);
 //04-11-2026
 
 function guardarCookie(nombre, valor, dias) {
@@ -434,15 +427,21 @@ function leerCookie(nombre) {
   return null;
 }
 
-function elegirOrden (nuevo) { 
-  criterio = nuevo; 
-  guardarCookie("orden", criterio, 30); 
-  actualizar(); 
-  document.querySelector("#ordenNombre") 
-    .addEventListener("click", () => elegirOrden("nombre"));
-    document.querySelector("#ordenTiempo") 
-      .addEventListener("click", () => elegirOrden("tiempo"));
+function elegirOrden(nuevo) {
+  criterio = nuevo;
+  guardarCookie("orden", criterio, 30);
+  actualizar();
 }
 
-/* criterio = leerCookie("orden") ?? "ninguno"; 
-actualizar(); */
+document.querySelector("#ordenTitulo")
+  .addEventListener("click", () => elegirOrden("titulo"));
+
+document.querySelector("#ordenDuracion")
+  .addEventListener("click", () => elegirOrden("duracion"));
+
+document.querySelector("#ordenFecha")
+  .addEventListener("click", () => elegirOrden("fecha"));
+
+
+criterio = leerCookie("orden") ?? "ninguno"; 
+actualizar();
