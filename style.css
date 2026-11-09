@@ -27,6 +27,7 @@ h1 {
 
 .tarjeta p {
     line-height: 1.6;
+    white-space: pre-line;
 }
 
 .tarjeta-accion {
@@ -85,9 +86,6 @@ button {
     border-radius: 5px;
 }
 
-.tarjeta p {
-    white-space: pre-line;
-}
 
 #buscador {
     padding: 8px;
