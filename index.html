@@ -19,10 +19,20 @@
         <input id="buscador" type="search" placeholder="Buscar...">
         <button id="ordenTitulo">0rdenar A-Z</button> 
         <button id="ordenDuracion">0rdenar por duracion</button>
-        <button id="ordenFecha">0rdenar por Fecha</button>
+        <button id="ordenEstreno">0rdenar por Estreno</button>
     </section>
     <p id="estadisticas"></p>
+    <section>
+    <h2>Añadir película</h2>
 
+    <input type="text" id="nuevoTitulo" placeholder="Título">
+    <input type="text" id="nuevoGenero" placeholder="Genero">
+    <input type="text" id="nuevoDirector" placeholder="Director">
+    <input type="number" id="nuevaDuracion" placeholder="Duración">
+    <input type="date" id="nuevoEstreno">
+
+    <button id="anadirPelicula">Añadir película</button>
+</section>
     <main id="listado"></main>
 
     <script src="js/app.js" defer></script>

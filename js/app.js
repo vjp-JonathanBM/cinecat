@@ -164,6 +164,33 @@ function obtenerClaseGenero(genero) {
 }
 
 
+const ANNOS_RECIENTE = 5;
+
+function crearFecha(texto) {
+    return new Date(texto + "T00:00");
+}
+
+function fechaLegible(texto) {
+    return crearFecha(texto).toLocaleDateString("es-ES",
+        { day: "numeric", month: "long", year: "numeric" });
+}
+
+function annosDesde(texto) {
+    const fecha = crearFecha(texto);
+    const hoy = new Date();
+
+    let annos = hoy.getFullYear() - fecha.getFullYear();
+
+    if (hoy.getMonth() < fecha.getMonth() ||
+        (hoy.getMonth() === fecha.getMonth() && hoy.getDate() < fecha.getDate())) {
+        annos--;
+    }
+
+    return annos;
+}
+
+
+
 function crearTarjeta(elemento) {
   const tarjeta = document.createElement("article");
   tarjeta.classList.add("tarjeta");
@@ -176,17 +203,24 @@ function crearTarjeta(elemento) {
   const parrafo = document.createElement("p");
 
   parrafo.textContent =
-    "Id: " + elemento.id +
-    "Genero: " + elemento.genero +
-    "Estreno: " + elemento.estreno +
-    "Año: " + elemento.anno +
-    "Duracion: " + elemento.duracion +
+    "Id: " + elemento.id + "\n" +
+    "Genero: " + elemento.genero + "\n" +
+    "Año: " + elemento.anno + "\n" +
+    "Duracion: " + elemento.duracion + "\n" +
     "Director: " + elemento.director;
 
-  tarjeta.appendChild(titulo);
-  tarjeta.appendChild(parrafo);
+  const fecha = document.createElement("p");
+  fecha.classList.add("fecha");
+  fecha.textContent = fechaLegible(elemento.estreno);
+
+  if (annosDesde(elemento.estreno) < ANNOS_RECIENTE) {
+    tarjeta.classList.add("reciente");
+}
+
+  tarjeta.append(titulo, parrafo, fecha);
 
   return tarjeta;
+
 }
 
 function ordenar(lista, criterio) {
@@ -198,7 +232,7 @@ function ordenar(lista, criterio) {
     copia.sort((a, b) => a.duracion - b.duracion);
   }
    else if (criterio === "estreno") {
-    copia.sort((a, b) => a.estreno - b.estreno);
+    copia.sort((a, b) => crearFecha(b.estreno) - crearFecha(a.estreno));
   }
   return copia;
 }
@@ -209,6 +243,7 @@ function actualizar() {
   const ordenadas = ordenar(encontradas, criterio);
   pintar(ordenadas);
   pintarResumen(ordenadas);
+  pintarEstadisticas(ordenadas);
 }
 
 function pintarResumen(peliculasFiltradas) {
@@ -221,13 +256,16 @@ function pintarResumen(peliculasFiltradas) {
   }
 }
 
+
+
+
 const peliculas1 = [
   {
     id: 1,
     titulo: "Titanic",
     director: "James Cameron",
     anno: 1997,
-    estreno: "19-12-1997",
+    estreno: "1997-12-19",
     genero: "Romance",
     duracion: 195
   },
@@ -236,7 +274,7 @@ const peliculas1 = [
     titulo: "Avatar",
     director: "James Cameron",
     anno: 2009,
-    estreno: "18-12-2009",
+    estreno: "2009-12-18",
     genero: "Ciencia ficción",
     duracion: 162
   },
@@ -245,7 +283,7 @@ const peliculas1 = [
     titulo: "Origen",
     director: "Christopher Nolan",
     anno: 2010,
-    estreno: "16-07-2010",
+    estreno: "2010-07-16",
     genero: "Ciencia ficción",
     duracion: 148
   },
@@ -254,7 +292,7 @@ const peliculas1 = [
     titulo: "Gladiator",
     director: "Ridley Scott",
     anno: 2000,
-    estreno: "05-05-2000",
+    estreno: "2000-05-05",
     genero: "Acción",
     duracion: 155
   },
@@ -263,7 +301,7 @@ const peliculas1 = [
     titulo: "El padrino",
     director: "Francis Ford Coppola",
     anno: 1972,
-    estreno: "24-03-1972",
+    estreno: "1972-03-24",
     genero: "Drama",
     duracion: 175
   },
@@ -272,7 +310,7 @@ const peliculas1 = [
     titulo: "Interstellar",
     director: "Christopher Nolan",
     anno: 2014,
-    estreno: "07-11-2014",
+    estreno: "2014-11-07",
     genero: "Ciencia ficción",
     duracion: 169
   },
@@ -281,7 +319,7 @@ const peliculas1 = [
     titulo: "Joker",
     director: "Todd Phillips",
     anno: 2019,
-    estreno: "04-10-2019",
+    estreno: "2019-10-04",
     genero: "Drama",
     duracion: 122
   },
@@ -290,7 +328,7 @@ const peliculas1 = [
     titulo: "Toy Story",
     director: "John Lasseter",
     anno: 1995,
-    estreno: "22-11-1995",
+    estreno: "1995-11-22",
     genero: "Animación",
     duracion: 81
   },
@@ -299,7 +337,7 @@ const peliculas1 = [
     titulo: "Tiburón",
     director: "Steven Spielberg",
     anno: 1975,
-    estreno: "20-06-1975",
+    estreno: "1975-06-20",
     genero: "Terror",
     duracion: 124
   },
@@ -308,11 +346,13 @@ const peliculas1 = [
     titulo: "Rocky",
     director: "John G. Avildsen",
     anno: 1976,
-    estreno: "03-12-1976",
+    estreno: "1976-12-03",
     genero: "Deportes",
     duracion: 119
   }
 ];
+
+
 
 
 const peliculas2 = [
@@ -321,7 +361,7 @@ const peliculas2 = [
     titulo: "Matrix",
     director: "Lana y Lilly Wachowski",
     anno: 1999,
-    estreno: "31-03-1999",
+    estreno: "1999-03-31",
     genero: "Ciencia ficción",
     duracion: 136
   },
@@ -330,7 +370,7 @@ const peliculas2 = [
     titulo: "Forrest Gump",
     director: "Robert Zemeckis",
     anno: 1994,
-    estreno: "06-07-1994",
+    estreno: "1994-07-06",
     genero: "Drama",
     duracion: 142
   },
@@ -339,7 +379,7 @@ const peliculas2 = [
     titulo: "Pulp Fiction",
     director: "Quentin Tarantino",
     anno: 1994,
-    estreno: "14-10-1994",
+    estreno: "1994-10-14",
     genero: "Crimen",
     duracion: 154
   },
@@ -348,7 +388,7 @@ const peliculas2 = [
     titulo: "Los Vengadores",
     director: "Joss Whedon",
     anno: 2012,
-    estreno: "04-05-2012",
+    estreno: "2012-05-04",
     genero: "Acción",
     duracion: 143
   },
@@ -357,7 +397,7 @@ const peliculas2 = [
     titulo: "Coco",
     director: "Lee Unkrich",
     anno: 2017,
-    estreno: "22-11-2017",
+    estreno: "2017-11-22",
     genero: "Animación",
     duracion: 105
   },
@@ -366,7 +406,7 @@ const peliculas2 = [
     titulo: "Jurassic Park",
     director: "Steven Spielberg",
     anno: 1993,
-    estreno: "11-06-1993",
+    estreno: "1993-06-11",
     genero: "Aventura",
     duracion: 127
   },
@@ -375,7 +415,7 @@ const peliculas2 = [
     titulo: "Star Wars",
     director: "George Lucas",
     anno: 1977,
-    estreno: "25-05-1977",
+    estreno: "1977-05-25",
     genero: "Ciencia ficción",
     duracion: 121
   },
@@ -384,7 +424,7 @@ const peliculas2 = [
     titulo: "El rey león",
     director: "Roger Allers",
     anno: 1994,
-    estreno: "24-06-1994",
+    estreno: "1994-06-24",
     genero: "Animación",
     duracion: 88
   },
@@ -393,7 +433,7 @@ const peliculas2 = [
     titulo: "Regreso al futuro",
     director: "Robert Zemeckis",
     anno: 1985,
-    estreno: "03-07-1985",
+    estreno: "1985-07-03",
     genero: "Aventura",
     duracion: 116
   },
@@ -402,11 +442,21 @@ const peliculas2 = [
     titulo: "Piratas del Caribe",
     director: "Gore Verbinski",
     anno: 2003,
-    estreno: "09-07-2003",
+    estreno: "2003-07-09",
     genero: "Aventura",
     duracion: 143
+  },
+  {
+    id: 21,
+    titulo: "Vengadores: Doomsday",
+    director: "Hermanos Russo",
+    anno: 2026,
+    estreno: "2026-12-18",
+    genero: "Acción",
+    duracion: 165
   }
 ];
+
 
 
 const peliculas = [...peliculas1, ...peliculas2];
@@ -414,8 +464,6 @@ const peliculas = [...peliculas1, ...peliculas2];
 let textoBuscado = "";
 let criterio = "ninguno";
 let resumen = "Mostrando";
-
-pintar(peliculas);
 
 buscador.addEventListener("input", () => {
   textoBuscado = buscador.value;
@@ -451,8 +499,47 @@ document.querySelector("#ordenTitulo")
 document.querySelector("#ordenDuracion")
   .addEventListener("click", () => elegirOrden("duracion"));
 
-document.querySelector("#ordenFecha")
-  .addEventListener("click", () => elegirOrden("fecha"));
+document.querySelector("#ordenEstreno")
+  .addEventListener("click", () => elegirOrden("estreno"));
+
+document.querySelector("#anadirPelicula").addEventListener("click", function () {
+
+    const titulo = document.querySelector("#nuevoTitulo").value;
+
+    const patron = /^[a-zA-ZÁÉÍÓÚáéíóúñÑ0-9 ]{2,50}$/;
+
+    if (!patron.test(titulo)) {
+        alert("El título debe tener entre 2 y 50 caracteres y no contener símbolos.");
+        return;
+    }
+
+    const nuevaPelicula = {
+        titulo: titulo,
+        director: document.querySelector("#nuevoDirector").value,
+        duracion: Number(document.querySelector("#nuevaDuracion").value),
+        genero: document.querySelector("#nuevoGenero").value,
+        estreno: document.querySelector("#nuevoEstreno").value,
+        anno: Number(document.querySelector("#nuevoEstreno").value.slice(0, 4))
+    };
+
+    if (nuevaPelicula.estreno === "") {
+        alert("Selecciona una fecha de estreno.");
+        return;
+    }
+
+    const nuevoId = annadir(peliculas, nuevaPelicula);
+
+    if (nuevoId !== false) {
+        alert("Película añadida correctamente");
+
+        document.querySelector("#nuevoTitulo").value = "";
+        document.querySelector("#nuevoDirector").value = "";
+        document.querySelector("#nuevaDuracion").value = "";
+        document.querySelector("#nuevoEstreno").value = "";
+
+        actualizar();
+    }
+});
 
 
 criterio = leerCookie("orden") ?? "ninguno"; 

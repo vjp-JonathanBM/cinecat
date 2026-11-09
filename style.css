@@ -1,61 +1,96 @@
 body {
-    font-family: sans-serif;
-    margin: 0 2rem;
+    font-family: 'Trebuchet MS', sans-serif;
+    margin: 2rem;
+    background-color: #f2f2f2;
+    color: #222;
+}
+
+h1 {
+    text-align: center;
 }
 
 #listado {
     display: grid;
     gap: 1rem;
-    grid-template-columns: repeat (auto-fill, minmax (220px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
 }
 
 .tarjeta {
-    background: white;
     padding: 1rem;
     border-radius: 8px;
-    box-shadow: 0 1px 4px #0003;
+    box-shadow: 0 2px 5px #0003;
+}
+
+.tarjeta h3 {
+    font-size: 1.3rem;
+}
+
+.tarjeta p {
+    line-height: 1.6;
 }
 
 .tarjeta-accion {
-    border: 3px solid red;
+    background-color: #ffcdd2;
 }
 
 .tarjeta-comedia {
-    border: 3px solid yellow;
+    background-color: #fff9c4;
 }
 
 .tarjeta-terror {
-    border: 3px solid purple;
+    background-color: #e1bee7;
 }
 
 .tarjeta-romance {
-    border: 3px solid pink;
+    background-color: #f8bbd0;
 }
 
 .tarjeta-drama {
-    border: 3px solid green;
+    background-color: #c8e6c9;
 }
 
 .tarjeta-ciencia-ficcion {
-    border: 3px solid blue;
+    background-color: #bbdefb;
 }
 
 .tarjeta-animacion {
-    border-left: 5px solid #ff9800;
-    background-color: #fff3e0;
+    background-color: #ffe0b2;
 }
 
 .tarjeta-deportes {
-    border-left: 5px solid #4caf50;
-    background-color: #e8f5e9;
+    background-color: #b2dfdb;
 }
 
 .tarjeta-crimen {
-    border-left: 5px solid #607d8b;
-    background-color: #eceff1;
+    background-color: #cfd8dc;
 }
 
 .tarjeta-aventura {
-    border-left: 5px solid #795548;
-    background-color: #efebe9;
+    background-color: #d7ccc8;
+}
+
+.reciente { 
+    border-left: 8px solid #f26b3a; 
+}
+
+.fecha {
+    color: #444;
+    font-size: 0.9rem;
+}
+
+button {
+    padding: 8px 12px;
+    cursor: pointer;
+    border: 1px solid #aaa;
+    border-radius: 5px;
+}
+
+.tarjeta p {
+    white-space: pre-line;
+}
+
+#buscador {
+    padding: 8px;
+    border: 1px solid #aaa;
+    border-radius: 5px;
 }
