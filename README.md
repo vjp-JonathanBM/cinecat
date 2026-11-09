@@ -85,6 +85,7 @@ En el Sprint 1 se ha creado la interfaz web de Cinecat utilizando HTML, CSS y Ja
 - `guardarCookie(nombre, valor, dias)`: guarda una cookie.
 - `leerCookie(nombre)`: recupera el valor de una cookie.
 - `elegirOrden(nuevo)`: cambia el criterio de ordenación.
+- `annadirPeliculaPorFormulario`: annade peliculas con el formulario, aparte tambien he hecho mas funciones mas auxiliares para reducir logica
 
 ## 5. Cómo ejecutar el proyecto
 

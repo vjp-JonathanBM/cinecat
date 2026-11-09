@@ -299,9 +299,9 @@ function estadisticas(lista) {
       maximo = film;
     }
   }
-  
+
   const media = suma / lista.length;
-  
+
   return {
     total: lista.length,
     duracionTotal: suma,
@@ -310,92 +310,156 @@ function estadisticas(lista) {
   };
 }
 
+function annadirPeliculaPorFormulario() {
+
+  const titulo = document.querySelector("#nuevoTitulo").value;
+
+  const patron = /^[a-zA-ZÁÉÍÓÚÜáéíóúüñÑ0-9 :.,'!?-]{2,50}$/;
+
+  if (!patron.test(titulo)) {
+    alert("El título debe tener entre 2 y 50 caracteres y no contener símbolos.");
+    return;
+  }
+
+  const nuevaPelicula = extraerFormulario();
+
+  const formularioValidado = validarFormulario(nuevaPelicula);
+  console.log("Entra")
+  console.log(formularioValidado)
+
+  if (!formularioValidado) return;
+
+  const nuevoId = annadir(peliculas, nuevaPelicula);
+
+  if (nuevoId !== false) {
+    alert("Película añadida correctamente");
+
+    limpiarFormulario();
+    console.log(nuevaPelicula);
+    actualizar();
+  }
+
+}
+
 // ============================================================
 // 3. FUNCIONES AUXILIARES: GÉNEROS, FECHAS Y COOKIES
 // ============================================================
 
 // Devuelve la clase CSS correspondiente al género.
 function obtenerClaseGenero(genero) {
-    switch (genero.toLowerCase()) {
-        case "acción":
-            return "tarjeta-accion";
+  switch (genero.toLowerCase()) {
+    case "acción":
+      return "tarjeta-accion";
 
-        case "comedia":
-            return "tarjeta-comedia";
+    case "comedia":
+      return "tarjeta-comedia";
 
-        case "terror":
-            return "tarjeta-terror";
+    case "terror":
+      return "tarjeta-terror";
 
-        case "romance":
-            return "tarjeta-romance";
+    case "romance":
+      return "tarjeta-romance";
 
-        case "drama":
-            return "tarjeta-drama";
+    case "drama":
+      return "tarjeta-drama";
 
-        case "ciencia ficción":
-            return "tarjeta-ciencia-ficcion";
+    case "ciencia ficción":
+      return "tarjeta-ciencia-ficcion";
 
-        case "animación":
-            return "tarjeta-animacion";
-        
-        case "deportes":
-            return "tarjeta-deportes";
-        
-        case "crimen":
-            return "tarjeta-crimen";
+    case "animación":
+      return "tarjeta-animacion";
 
-        case "aventura":
-            return "tarjeta-aventura";
-            
-        default:
-            return "";
-    }
+    case "deportes":
+      return "tarjeta-deportes";
+
+    case "crimen":
+      return "tarjeta-crimen";
+
+    case "aventura":
+      return "tarjeta-aventura";
+
+    default:
+      return "";
+  }
 }
 
+// Define cuantos años menos tiene que tener para que sea marcado como reciente
+//  al ser peliculas y abarcar tanto tiempo vi mejor hacerlo asi que en 30 dias.
 const ANNOS_RECIENTE = 5;
 
 // Convierte una fecha de texto en un objeto Date.
 function crearFecha(texto) {
-    return new Date(texto + "T00:00");
+  return new Date(texto + "T00:00");
 }
 
 // Muestra la fecha en un formato legible.
 function fechaLegible(texto) {
-    return crearFecha(texto).toLocaleDateString("es-ES",
-        { day: "numeric", month: "long", year: "numeric" });
+  return crearFecha(texto).toLocaleDateString("es-ES",
+    { day: "numeric", month: "long", year: "numeric" });
 }
 
 // Comprueba los años que han pasado desde la fecha que le pasamos
 function annosDesde(texto) {
-    const fecha = crearFecha(texto);
-    const hoy = new Date();
+  const fecha = crearFecha(texto);
+  const hoy = new Date();
 
-    let annos = hoy.getFullYear() - fecha.getFullYear();
+  let annos = hoy.getFullYear() - fecha.getFullYear();
 
-    if (hoy.getMonth() < fecha.getMonth() ||
-        (hoy.getMonth() === fecha.getMonth() && hoy.getDate() < fecha.getDate())) {
-        annos--;
-    }
+  const aniversario = new Date(hoy.getFullYear(), fecha.getMonth(), fecha.getDate());
 
-    return annos;
+  if (hoy < aniversario) annos--;
+
+  return annos;
 }
 
 // Guarda una cookie.
 function guardarCookie(nombre, valor, dias) {
   const segundos = dias * 24 * 60 * 60;
-  const texto = encodeURIComponent(valor); 
+  const texto = encodeURIComponent(valor);
   document.cookie = `${nombre}=${texto}; max-age=${segundos}; path=/`;
-} 
+}
 
 //Lee una cookie
-function leerCookie(nombre) { 
+function leerCookie(nombre) {
   const partes = document.cookie.split("; ");
-  for (const parte of partes) { const [clave, valor] = parte.split("=");
-    if (clave === nombre) { 
+  for (const parte of partes) {
+    const [clave, valor] = parte.split("=");
+    if (clave === nombre) {
       return decodeURIComponent(valor);
-    } 
-  } 
+    }
+  }
   return null;
+}
+
+// Ir añadiendo ifs segun quiera meter mas validaciones
+function validarFormulario(nuevaPelicula) {
+  if (nuevaPelicula.estreno === "") {
+    alert("Selecciona una fecha de estreno.");
+    return false;
+  }
+  return true;
+}
+
+//Extrae los datos del formulario
+function extraerFormulario() {
+  const nuevaPelicula = {
+    titulo: document.querySelector("#nuevoTitulo").value,
+    director: document.querySelector("#nuevoDirector").value,
+    duracion: Number(document.querySelector("#nuevaDuracion").value),
+    genero: document.querySelector("#nuevoGenero").value,
+    estreno: document.querySelector("#nuevoEstreno").value,
+    anno: Number(document.querySelector("#nuevoEstreno").value.slice(0, 4))
+  };
+  return nuevaPelicula;
+}
+
+//Limpia el formulario
+function limpiarFormulario() {
+  document.querySelector("#nuevoTitulo").value = "";
+  document.querySelector("#nuevoGenero").value = "";
+  document.querySelector("#nuevoDirector").value = "";
+  document.querySelector("#nuevaDuracion").value = "";
+  document.querySelector("#nuevoEstreno").value = "";
 }
 
 // ============================================================
@@ -411,7 +475,7 @@ function ordenar(lista, criterio) {
   } else if (criterio === "duracion") {
     copia.sort((a, b) => a.duracion - b.duracion);
   }
-   else if (criterio === "estreno") {
+  else if (criterio === "estreno") {
     copia.sort((a, b) => crearFecha(b.estreno) - crearFecha(a.estreno));
   }
   return copia;
@@ -421,6 +485,7 @@ function ordenar(lista, criterio) {
 // 5. INTERFAZ: TARJETAS, RESUMEN Y ESTADÍSTICAS
 // ============================================================
 
+// TODO: Falla si meto un genero que no existe, ya lo arreglare
 // Crea una tarjeta HTML para una película.
 function crearTarjeta(elemento) {
   const tarjeta = document.createElement("article");
@@ -446,7 +511,7 @@ function crearTarjeta(elemento) {
 
   if (annosDesde(elemento.estreno) < ANNOS_RECIENTE) {
     tarjeta.classList.add("reciente");
-}
+  }
 
   tarjeta.append(titulo, parrafo, fecha);
 
@@ -467,9 +532,9 @@ function pintar(list) {
 function pintarResumen(peliculasFiltradas) {
   const resumenP = document.querySelector(".resumen");
 
-  if(peliculasFiltradas.length > 0) {
-    resumenP.textContent = "Mostrando "+peliculasFiltradas.length + " de "+peliculas.length;
-  }else{
+  if (peliculasFiltradas.length > 0) {
+    resumenP.textContent = "Mostrando " + peliculasFiltradas.length + " de " + peliculas.length;
+  } else {
     resumenP.textContent = "No hay peliculas que contengan << " + textoBuscado + ">>.";
   }
 }
@@ -483,7 +548,7 @@ function pintarEstadisticas(lista) {
     elemento.textContent = "No hay películas para mostrar.";
     return;
   }
-  
+
   elemento.textContent = `Películas: ${resultado.total} | Duración total: ${resultado.duracionTotal} min | Duración media: ${resultado.media} min | La más larga: ${resultado.maximo}`;
 }
 
@@ -509,45 +574,9 @@ function elegirOrden(nuevo) {
   actualizar();
 }
 
-document.querySelector("#anadirPelicula").addEventListener("click", function () {
-
-    const titulo = document.querySelector("#nuevoTitulo").value;
-
-    const patron = /^[a-zA-ZÁÉÍÓÚÜáéíóúüñÑ0-9 :.,'!?-]{2,50}$/;
-
-    if (!patron.test(titulo)) {
-        alert("El título debe tener entre 2 y 50 caracteres y no contener símbolos.");
-        return;
-    }
-
-    const nuevaPelicula = {
-        titulo: titulo,
-        director: document.querySelector("#nuevoDirector").value,
-        duracion: Number(document.querySelector("#nuevaDuracion").value),
-        genero: document.querySelector("#nuevoGenero").value,
-        estreno: document.querySelector("#nuevoEstreno").value,
-        anno: Number(document.querySelector("#nuevoEstreno").value.slice(0, 4))
-    };
-
-    if (nuevaPelicula.estreno === "") {
-        alert("Selecciona una fecha de estreno.");
-        return;
-    }
-
-    const nuevoId = annadir(peliculas, nuevaPelicula);
-
-    if (nuevoId !== false) {
-        alert("Película añadida correctamente");
-
-        document.querySelector("#nuevoTitulo").value = "";
-        document.querySelector("#nuevoGenero").value = "";
-        document.querySelector("#nuevoDirector").value = "";
-        document.querySelector("#nuevaDuracion").value = "";
-        document.querySelector("#nuevoEstreno").value = "";
-
-        actualizar();
-    }
-});
+document.querySelector("#anadirPelicula")
+.addEventListener("click", () =>
+  annadirPeliculaPorFormulario());
 
 buscador.addEventListener("input", () => {
   textoBuscado = buscador.value;
@@ -571,5 +600,5 @@ let textoBuscado = "";
 let criterio = "ninguno";
 let resumen = "Mostrando";
 
-criterio = leerCookie("orden") ?? "ninguno"; 
+criterio = leerCookie("orden") ?? "ninguno";
 actualizar();
