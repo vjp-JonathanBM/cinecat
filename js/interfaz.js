@@ -33,12 +33,6 @@ function annadirPeliculaPorFormulario() {
 
   if (!formularioValidado) return;
 
-  const objetoPelicula = crearPelicula(nuevaPelicula);
-
-  if(objetoPelicula === -1) {
-    throw 
-  }
-
   const nuevoId = annadir(listaPeliculas, nuevaPelicula);
 
   if (nuevoId !== false) {
@@ -192,3 +186,4 @@ for ( const datos of datosPeliculas ) {
 
 criterio = leerCookie("orden") ?? "ninguno";
 actualizar();
+console.table(listaPeliculas);

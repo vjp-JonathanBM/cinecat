@@ -1,4 +1,4 @@
-import { Pelicula } from "./peliculas";
+import { Pelicula } from "./peliculas.js";
 
 /**
  * Muestra por consola cada elemento de la lista.
@@ -58,7 +58,9 @@ export function annadir(items, item) {
   });
 
   const nuevoId = maxId + 1;
-  items.push({ ...item, id: nuevoId });
+  const nuevaPelicula = new Pelicula(item);
+  nuevaPelicula._id = nuevoId;
+  items.push(nuevaPelicula);
   return nuevoId;
 }
 
@@ -148,17 +150,6 @@ export function obtenerClaseGenero(genero) {
 // Convierte una fecha de texto en un objeto Date.
 function crearFecha(texto) {
   return new Date(texto + "T00:00");
-}
-
-/**
- * Para crear un objeto Pelicula y hacer las validaciones
- * @param {Object} pelicula - Pelicula a crear.
- * @returns {Pelicula} Retorna un objeto Pelicula, revisar campos por validacion.
- */
-export function crearPelicula(objeto) {
-  let pelicula = new Pelicula (...objeto);
-  pelicula.duracion(objeto.duracion);
-  return pelicula;
 }
 
 // Muestra la fecha en un formato legible.

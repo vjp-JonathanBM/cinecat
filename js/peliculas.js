@@ -6,7 +6,7 @@ export class Pelicula {
         this.anno = pelicula.anno;
         this.estreno = pelicula.estreno;
         this.genero = pelicula.genero;
-        this.duracion = -1      //Si acaba teniendo -1 es error de validacion en algun metodo
+        this.duracion = pelicula.duracion;
     }
 
     get id() {
