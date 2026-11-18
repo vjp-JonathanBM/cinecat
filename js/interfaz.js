@@ -33,7 +33,11 @@ function annadirPeliculaPorFormulario() {
 
   if (!formularioValidado) return;
 
-  const objetoPelicula = crearPelicula
+  const objetoPelicula = crearPelicula(nuevaPelicula);
+
+  if(objetoPelicula === -1) {
+    throw 
+  }
 
   const nuevoId = annadir(listaPeliculas, nuevaPelicula);
 
