@@ -7,8 +7,10 @@ import { annosDesde } from "./logica.js";
 import { extraerFormulario } from "./logica.js";
 import { ordenar } from "./logica.js";
 
-import { peliculas } from "./datos.js";
+import { datosPeliculas } from "./datos.js";
+import { Pelicula } from "./peliculas.js";
 
+const listaPeliculas = []
 let textoBuscado = "";
 let criterio = "ninguno";
 export let resumen = "Mostrando";
@@ -31,7 +33,9 @@ function annadirPeliculaPorFormulario() {
 
   if (!formularioValidado) return;
 
-  const nuevoId = annadir(peliculas, nuevaPelicula);
+  const objetoPelicula = crearPelicula
+
+  const nuevoId = annadir(listaPeliculas, nuevaPelicula);
 
   if (nuevoId !== false) {
     alert("Película añadida correctamente");
@@ -93,12 +97,7 @@ function crearTarjeta(elemento) {
 
   const parrafo = document.createElement("p");
 
-  parrafo.textContent =
-    "Id: " + elemento.id + "\n" +
-    "Genero: " + elemento.genero + "\n" +
-    "Año: " + elemento.anno + "\n" +
-    "Duracion: " + elemento.duracion + "\n" +
-    "Director: " + elemento.director;
+  parrafo.textContent = elemento.descripcion();
 
   const fecha = document.createElement("p");
   fecha.classList.add("fecha");
@@ -128,7 +127,7 @@ function pintarResumen(peliculasFiltradas) {
   const resumenP = document.querySelector(".resumen");
 
   if (peliculasFiltradas.length > 0) {
-    resumenP.textContent = "Mostrando " + peliculasFiltradas.length + " de " + peliculas.length;
+    resumenP.textContent = "Mostrando " + peliculasFiltradas.length + " de " + listaPeliculas.length;
   } else {
     resumenP.textContent = "No hay peliculas que contengan << " + textoBuscado + ">>.";
   }
@@ -149,7 +148,7 @@ function pintarEstadisticas(lista) {
 
 // Aplica búsqueda y ordenación y actualiza la página.
 function actualizar() {
-  const encontradas = buscarPorTexto(peliculas, textoBuscado);
+  const encontradas = buscarPorTexto(listaPeliculas, textoBuscado);
   const ordenadas = ordenar(encontradas, criterio);
 
   pintar(ordenadas);
@@ -182,6 +181,10 @@ document.querySelector("#ordenDuracion")
 
 document.querySelector("#ordenEstreno")
   .addEventListener("click", () => elegirOrden("estreno"));
+
+for ( const datos of datosPeliculas ) {
+  listaPeliculas.push(new Pelicula( datos ));
+}
 
 criterio = leerCookie("orden") ?? "ninguno";
 actualizar();

@@ -1,4 +1,4 @@
-const peliculas1 = [
+const datosPeliculas1 = [
   {
     id: 1,
     titulo: "Titanic",
@@ -91,7 +91,7 @@ const peliculas1 = [
   }
 ];
 
-const peliculas2 = [
+const datosPeliculas2 = [
   {
     id: 11,
     titulo: "Matrix",
@@ -193,4 +193,4 @@ const peliculas2 = [
   }
 ];
 
-export const peliculas = [...peliculas1, ...peliculas2];
+export const datosPeliculas = [...datosPeliculas1, ...datosPeliculas2];

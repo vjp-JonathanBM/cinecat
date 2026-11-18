@@ -1,3 +1,5 @@
+import { Pelicula } from "./peliculas";
+
 /**
  * Muestra por consola cada elemento de la lista.
  * @param {Array} items - Lista de elementos a mostrar.
@@ -146,6 +148,17 @@ export function obtenerClaseGenero(genero) {
 // Convierte una fecha de texto en un objeto Date.
 function crearFecha(texto) {
   return new Date(texto + "T00:00");
+}
+
+/**
+ * Para crear un objeto Pelicula y hacer las validaciones
+ * @param {Object} pelicula - Pelicula a crear.
+ * @returns {Pelicula} Retorna un objeto Pelicula, revisar campos por validacion.
+ */
+export function crearPelicula(objeto) {
+  let pelicula = new Pelicula (...objeto);
+  pelicula.duracion(objeto.duracion);
+  return pelicula;
 }
 
 // Muestra la fecha en un formato legible.
