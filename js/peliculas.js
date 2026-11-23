@@ -63,6 +63,7 @@ export class Pelicula {
 
     set duracion(duracion) {
         if (typeof duracion !== "number" || duracion <= 0) {
+            window.alert(`Duración no válida en «${this.titulo}»: ${duracion}`);
             throw new Error(`Duración no válida en «${this.titulo}»: ${duracion}`);
         }
 

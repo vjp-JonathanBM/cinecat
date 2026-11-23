@@ -186,4 +186,3 @@ for ( const datos of datosPeliculas ) {
 
 criterio = leerCookie("orden") ?? "ninguno";
 actualizar();
-console.table(listaPeliculas);
