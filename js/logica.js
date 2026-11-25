@@ -1,4 +1,5 @@
 import { Pelicula } from "./peliculas.js";
+import { Catalogo } from "./catalogo.js";
 
 /**
  * Muestra por consola cada elemento de la lista.
@@ -32,18 +33,6 @@ export function countByCategory(items, genre) {
 }
 
 /**
- * Busca películas cuyo título contenga el texto indicado,
- * sin distinguir mayúsculas de minúsculas.
- * @param {Array} items - Lista de películas.
- * @param {string} text - Texto a buscar dentro del título.
- * @returns {Array} Nuevo array con las películas encontradas.
- */
-export function buscarPorTexto(items, text) {
-  const textMinus = text.toLowerCase();
-  return items.filter(v => v.titulo.toLowerCase().includes(textMinus));
-}
-
-/**
  * Añade una película a la lista asignándole un id nuevo
  * (el mayor id existente + 1). No modifica el objeto original,
  * guarda una copia con el id asignado.
@@ -51,16 +40,11 @@ export function buscarPorTexto(items, text) {
  * @param {Object} item - Película a añadir (sin id).
  * @returns {number} El id asignado a la nueva película.
  */
-export function annadir(items, item) {
-  let maxId = 0;
-  items.forEach(v => {
-    if (v.id > maxId) maxId = v.id;
-  });
-
-  const nuevoId = maxId + 1;
+export function annadir(item) {
+  const nuevoId = Catalogo.lastId + 1;
   const nuevaPelicula = new Pelicula(item);
   nuevaPelicula._id = nuevoId;
-  items.push(nuevaPelicula);
+  Catalogo.addPelicula(nuevaPelicula);
   return nuevoId;
 }
 

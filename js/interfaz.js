@@ -9,8 +9,9 @@ import { ordenar } from "./logica.js";
 
 import { datosPeliculas } from "./datos.js";
 import { Pelicula } from "./peliculas.js";
+import { Catalogo } from "./catalogo.js";
 
-const listaPeliculas = []
+// ESTO LO TENGO QUE QUITAR const listaPeliculas = []
 let textoBuscado = "";
 let criterio = "ninguno";
 export let resumen = "Mostrando";
@@ -33,7 +34,7 @@ function annadirPeliculaPorFormulario() {
 
   if (!formularioValidado) return;
 
-  const nuevoId = annadir(listaPeliculas, nuevaPelicula);
+  const nuevoId = annadir(nuevaPelicula);
 
   if (nuevoId !== false) {
     alert("Película añadida correctamente");
@@ -146,7 +147,7 @@ function pintarEstadisticas(lista) {
 
 // Aplica búsqueda y ordenación y actualiza la página.
 function actualizar() {
-  const encontradas = buscarPorTexto(listaPeliculas, textoBuscado);
+  const encontradas = Catalogo.buscarPorTexto(textoBuscado);
   const ordenadas = ordenar(encontradas, criterio);
 
   pintar(ordenadas);
